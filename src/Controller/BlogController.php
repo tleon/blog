@@ -89,15 +89,8 @@ class BlogController extends AbstractController
       throw $this
         ->createNotFoundException('No Category has been sent to find an article in article\'s table.');
     }
-    $categoryName = preg_replace(
-      '/-/',
-      ' ',
-      ucwords(trim(strip_tags($category->getName())), "-")
-    );
-    $cat = $this->getDoctrine()->getRepository(Category::class)->findOneBy(['name' => mb_strtolower($categoryName)]);
-    $articles = $cat->getArticles();
-    return $this->render('blog/category.html.twig', ["articles" => $articles, "category" => $cat]);
-    
+    $articles = $category->getArticles();
+    return $this->render('blog/category.html.twig', ["articles" => $articles, "category" => $category]);
     
     if (!$articles) {
       throw $this->createNotFoundException(
