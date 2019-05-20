@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\Tag;
 
 class BlogController extends AbstractController
 {
@@ -79,7 +80,7 @@ class BlogController extends AbstractController
 
   /**
    * @Route("/category/{category}", name="show_category")
-   * @param string $category the cat of the article
+   * @param Category $category the cat of the article
    * @return Table of articles
    */
 
@@ -98,5 +99,14 @@ class BlogController extends AbstractController
       );
     }
 
+  }
+
+  /**
+   * @Route("/tag/{name}", name="show_tag")
+   * @param Tag provided in url
+   */
+  public function showByTag(Tag $tag){
+    $articles = $tag->getArticles();
+    return $this->render('blog/tag.html.twig', ["articles" => $articles, "tag" => $tag]);
   }
 }
