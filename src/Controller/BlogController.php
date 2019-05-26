@@ -41,7 +41,7 @@ class BlogController extends AbstractController
    *
    * @param string $slug The slugger
    *
-   * @Route("/{slug<^[a-z0-9-]+$>}",
+   * @Route("/blog/{slug<^[a-z0-9-]+$>}",
    *     defaults={"slug" = null},
    *     name="blog_show")
    *  @return Response A response instance
@@ -79,7 +79,7 @@ class BlogController extends AbstractController
   }
 
   /**
-   * @Route("/category/{category}", name="show_category")
+   * @Route("/blog/category/{category}", name="show_category")
    * @param Category $category the cat of the article
    * @return Table of articles
    */

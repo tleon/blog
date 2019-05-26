@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add a new category{% endblock %}
+
+{% block body %}
+
+<br>
+<br>
+<br>
+<br>
+
+<div class="row d-flex justify-content-around">
+        <h2>Add a new category</h2>
+
+</div>
+
+<div class="row d-flex justify-content-center">
+
+    {{ form_start(my_form) }}
+    
+    {{ form_widget(my_form) }}
+    <br>
+    <input type="submit" value="Ajouter">
+    
+    {{ form_end(my_form) }}
+</div>
+
+
+{% endblock %}
