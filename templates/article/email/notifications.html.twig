@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block body %}
+   lots of css yeah yeah !! this beautiful :!! 
+
+   Please validate quest.
+
+   {{ error }}
+
+   
+   <a href="{{ path('article_show', {'id': article.id}) }}">Article link</a>
+{% endblock %}

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\Slugify;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * @Route("/article")
@@ -29,7 +30,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/new", name="article_new", methods={"GET","POST"})
      */
-    public function new(Request $request, Slugify $slugify): Response
+    public function new(Request $request, Slugify $slugify, \Swift_Mailer $mailer): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
@@ -42,7 +43,21 @@ class ArticleController extends AbstractController
             $entityManager->persist($article);
             $entityManager->flush();
 
-            return $this->redirectToRoute('article_index');
+            // To use the ArrayLogger
+            $logger = new \Swift_Plugins_Loggers_ArrayLogger();
+            $mailer->registerPlugin(new \Swift_Plugins_LoggerPlugin($logger));
+            
+            $content = $this->renderView('article/email/notifications.html.twig', ['article' => $article, 'error' => ""]);
+            $message = (new \Swift_Message('Un nouvel article vient d\'être publié !'))
+            ->setTo('eithos41@gmail.com')
+            ->setBody($content, 'text/html');
+            try{
+                $mailer->send($message);
+            }catch(Exception $e){
+                return $this->render('article/email/notifications.html.twig', ['article' => $article, 'error' => $e . $logger->dump()]);
+            }
+
+            return $this->redirectToRoute('article_index'); 
         }
 
         return $this->render('article/new.html.twig', [
