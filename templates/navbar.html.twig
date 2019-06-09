@@ -1,3 +1,10 @@
 <nav class="navbar navbar-light bg-info d-flex justify-content-center">
     <a class="navbar-brand" href="/">Home</a>
+  {% if app.user %}
+      Bonjour {{ app.user.email }} !
+      <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+  {% else %}
+      <a href="{{ path('app_login') }}"> Se connecter</a>
+  {% endif %}
   </nav>
+  
