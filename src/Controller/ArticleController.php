@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\Slugify;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/article")
