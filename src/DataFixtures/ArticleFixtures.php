@@ -13,7 +13,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
 
   public function load(ObjectManager $manager)
   {
-    $faker = Faker\Factory::create('fr_FR');
+/*    $faker = Faker\Factory::create('fr_FR');
     $nbRefs = count(CategoryFixtures::CAT) - 1;
     $s = new Slugify();
     
@@ -25,7 +25,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
       $article->setSlug($s->generate($article->getTitle()));    
       $manager->persist($article);
     }
-    $manager->flush();
+    $manager->flush();*/
   }
 
   public function getDependencies()

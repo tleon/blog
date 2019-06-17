@@ -11,7 +11,7 @@ class CategoryFixtures extends Fixture
   
   public function load(ObjectManager $manager)
   {
-
+/*
     foreach(self::CAT as $k => $v){
 
       $category = new Category();
@@ -19,7 +19,7 @@ class CategoryFixtures extends Fixture
       $manager->persist($category);
       $this->addReference('categorie_' . $k, $category);
     }
-    $manager->flush();
+    $manager->flush();*/
   }
 
   public static function getCat(){
