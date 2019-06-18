@@ -40,21 +40,40 @@ class User implements UserInterface
      */
     private $articles;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Article")
+     */
+    private $Favoris;
+
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->articles = new ArrayCollection();
+        $this->Favoris = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return User
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -84,6 +103,10 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     * @return User
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -99,6 +122,10 @@ class User implements UserInterface
         return (string) $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return User
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -131,6 +158,10 @@ class User implements UserInterface
         return $this->articles;
     }
 
+    /**
+     * @param Article $article
+     * @return User
+     */
     public function addArticle(Article $article): self
     {
         if (!$this->articles->contains($article)) {
@@ -141,6 +172,10 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param Article $article
+     * @return User
+     */
     public function removeArticle(Article $article): self
     {
         if ($this->articles->contains($article)) {
@@ -152,5 +187,52 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Article[]
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->Favoris;
+    }
+
+    /**
+     * @param Article $favori
+     * @return User
+     */
+    public function addFavori(Article $favori): self
+    {
+        if (!$this->Favoris->contains($favori)) {
+            $this->Favoris[] = $favori;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Article $favori
+     * @return User
+     */
+    public function removeFavori(Article $favori): self
+    {
+        if ($this->Favoris->contains($favori)) {
+            $this->Favoris->removeElement($favori);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Article $article
+     * @return bool
+     */
+    public function isFavorite(Article $article) : bool
+    {
+        if($this->getFavoris()->contains($article))
+        {
+            return true;
+        }
+        return false;
     }
 }
