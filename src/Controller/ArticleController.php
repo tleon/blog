@@ -13,6 +13,7 @@ use App\Services\Slugify;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Swift_Mailer;
 
 /**
  * @Route("/article")
@@ -21,6 +22,8 @@ class ArticleController extends AbstractController
 {
     /**
      * @Route("/", name="article_index", methods={"GET"})
+     * @param ArticleRepository $articleRepository
+     * @return Response
      */
     public function index(ArticleRepository $articleRepository): Response
     {
@@ -31,8 +34,13 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/new", name="article_new", methods={"GET","POST"})
+     * @param Request $request
+     * @param Slugify $slugify
+     * @param Swift_Mailer $mailer
+     * @param ValidatorInterface $validator
+     * @return Response
      */
-    public function new(Request $request, Slugify $slugify, \Swift_Mailer $mailer, ValidatorInterface $validator): Response
+    public function new(Request $request, Slugify $slugify, Swift_Mailer $mailer, ValidatorInterface $validator): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
@@ -64,6 +72,7 @@ class ArticleController extends AbstractController
             if (count($error_messages) > 0 ){
                 return $this->render('article/new.html.twig', ['article' => $article, "error_messages" => $error_messages]);
             }
+            $this->addFlash('success', 'The new article has been created');
             return $this->redirectToRoute('article_index'); 
         }
 
@@ -75,6 +84,8 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}", name="article_show", methods={"GET"})
+     * @param Article $article
+     * @return Response
      */
     public function show(Article $article): Response
     {
@@ -85,6 +96,9 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
+     * @param  Request $request
+     * @param Article $article
+     * @return Response
      */
     public function edit(Request $request, Article $article): Response
     {
@@ -100,6 +114,7 @@ class ArticleController extends AbstractController
                 'id' => $article->getId(),
             ]);
         }
+        $this->addFlash('success', 'The article ' . $article->getId() . ' has been updated');
 
         return $this->render('article/edit.html.twig', [
             'article' => $article,
@@ -109,9 +124,13 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}", name="article_delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Article $article
+     * @return Response
      */
     public function delete(Request $request, Article $article): Response
     {
+        $this->addFlash('danger', 'The article '. $article->getId() . ' has been deleted');
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($article);

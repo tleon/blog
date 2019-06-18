@@ -29,18 +29,19 @@ class Article
 
     /**
      * @ORM\Column(type="text")
-     */
-    private $content;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="articles")
-     * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank()
      * @Assert\Regex(
      *     pattern="/digital/",
      *     match=false,
      *     message="en français, il faut dire numérique"
      * )
+     */
+    private $content;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="articles")
+     * @ORM\JoinColumn(nullable=false)
+
      */
     private $category;
 
